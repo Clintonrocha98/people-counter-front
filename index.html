@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contador de Pessoas</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+      }
+      .container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        margin-bottom: 20px;
+      }
+      .info {
+        font-size: 1.2em;
+      }
+      .timestamp {
+        margin-top: 10px;
+        color: gray;
+      }
+      button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 1em;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Total de Pessoas na Sala</h1>
+      <div class="info" id="totalPeople">Carregando...</div>
+      <div class="timestamp" id="lastUpdated">Carregando...</div>
+      <button onclick="fetchPeopleCount()">Atualizar</button>
+    </div>
+
+    <script>
+      async function fetchPeopleCount() {
+        try {
+          const response = await fetch(
+            "https://people-counter-api-bot-whats.onrender.com/api/"
+          );
+          if (!response.ok) {
+            throw new Error("Erro ao buscar dados da API");
+          }
+
+          const data = await response.json();
+          document.getElementById(
+            "totalPeople"
+          ).textContent = `Total de pessoas: ${data.totalPeople}`;
+          document.getElementById(
+            "lastUpdated"
+          ).textContent = `Última atualização: ${new Date(
+            data.lastUpdated
+          ).toLocaleString()}`;
+        } catch (error) {
+          console.error("Erro:", error);
+          document.getElementById("totalPeople").textContent =
+            "Erro ao carregar dados";
+          document.getElementById("lastUpdated").textContent = "";
+        }
+      }
+      fetchPeopleCount();
+    </script>
+  </body>
+</html>
